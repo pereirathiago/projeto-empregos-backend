@@ -4,6 +4,7 @@ import { container } from 'tsyringe'
 import { ICreateCompanyUserDTO } from '../dtos/ICreateCompanyDTO'
 import { IUpdateCompanyUserDTO } from '../dtos/IUpdateCompanyDTO'
 import { CreateCompanyUseCase } from '../useCases/CreateCompanyUseCase'
+import { DeleteCompanyUseCase } from '../useCases/DeleteCompanyUseCase'
 import { GetCompanyUseCase } from '../useCases/GetCompanyUseCase'
 import { UpdateCompanyUseCase } from '../useCases/UpdateCompanyUseCase'
 
@@ -47,6 +48,21 @@ class CompanyController {
     await updateCompanyUseCase.execute(Number(id), data)
 
     return res.status(200).json({ message: 'Updated' })
+  }
+
+  async delete(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params
+    const user = req.user
+
+    if (!user || user.id !== id) {
+      throw new ForbiddenError()
+    }
+
+    const deleteCompanyUseCase = container.resolve(DeleteCompanyUseCase)
+
+    await deleteCompanyUseCase.execute(Number(id))
+
+    return res.status(200).json({ message: 'Company deleted successfully' })
   }
 }
 

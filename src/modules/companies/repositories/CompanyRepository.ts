@@ -64,6 +64,12 @@ class CompanyRepository implements ICompanyRepository {
 
     return updatedCompany
   }
+
+  async deleteByUserId(userId: number, trx?: Knex.Transaction): Promise<void> {
+    const connection = trx || this.db
+
+    await connection('companies').where({ user_id: userId }).delete()
+  }
 }
 
 export { CompanyRepository }

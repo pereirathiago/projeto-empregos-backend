@@ -18,5 +18,6 @@ router.patch(
   validateUpdateCompany,
   companyController.update.bind(companyController),
 )
+router.delete('/:id', ensureAuthenticated, ensureCompanyRole, companyController.delete.bind(companyController))
 
 export default router
