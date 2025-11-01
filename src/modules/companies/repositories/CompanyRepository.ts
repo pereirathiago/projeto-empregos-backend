@@ -1,6 +1,7 @@
 import { Knex } from 'knex'
 import { inject, injectable } from 'tsyringe'
 import { ICreateCompanyDTO } from '../dtos/ICreateCompanyDTO'
+import { IUpdateCompanyDTO } from '../dtos/IUpdateCompanyDTO'
 import { ICompany, IUserCompany } from '../models/ICompany'
 import { ICompanyRepository } from './interfaces/ICompanyRepository'
 
@@ -45,6 +46,23 @@ class CompanyRepository implements ICompanyRepository {
       .first()
 
     return company
+  }
+
+  async update(userId: number, updateData: IUpdateCompanyDTO, trx: Knex.Transaction): Promise<ICompany> {
+    const connection = trx || this.db
+
+    const [updatedCompany] = await connection('companies')
+      .where({ user_id: userId })
+      .update({
+        business: updateData.business,
+        street: updateData.street,
+        number: updateData.number,
+        city: updateData.city,
+        state: updateData.state,
+      })
+      .returning('*')
+
+    return updatedCompany
   }
 }
 
