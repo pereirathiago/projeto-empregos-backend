@@ -101,7 +101,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"thiago\",\r\n    \"password\": \"senha123\"\r\n}",
+							"raw": "{\r\n    \"username\": \"madeirinho2\",\r\n    \"password\": \"senha\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -208,13 +208,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/users/24",
+							"raw": "{{host}}/users/25",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"users",
-								"24"
+								"25"
 							]
 						}
 					},
@@ -260,6 +260,103 @@
 							"path": [
 								"users",
 								"19"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Company",
+			"item": [
+				{
+					"name": "Cadastro Empresa",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Madero\",\r\n  \"business\": \"Comida\",\r\n  \"username\": \"madeirinho2.\",\r\n  \"password\": \"1 \",\r\n  \"street\": \"Marquês de Maricá\",\r\n  \"number\": \"1328\",\r\n  \"city\": \"Ponta Grossa\",\r\n  \"state\": \"PR\",\r\n  \"phone\": \"42995443534\",\r\n  \"email\": \"madeirinho2@madeiro.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/companies",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ler Empresa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/companies/42",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"companies",
+								"42"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Empresa",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Madero 2\",\r\n  \"business\": \"Comida\",\r\n  \"password\": \"senha\",\r\n  \"street\": \"Marquês de Maricá\",\r\n  \"number\": \"1327\",\r\n  \"city\": \"Ponta Grossa\",\r\n  \"state\": \"PR\",\r\n  \"phone\": \"42995443534\",\r\n  \"email\": \"madeirinho2@madeiro.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/companies/42",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"companies",
+								"42"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir empresa",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/companies/43",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"companies",
+								"43"
 							]
 						}
 					},
