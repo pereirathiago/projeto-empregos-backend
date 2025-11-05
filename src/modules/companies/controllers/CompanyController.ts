@@ -16,7 +16,7 @@ class CompanyController {
 
     await createCompanyUseCase.execute(data)
 
-    return res.status(200).json({ message: 'Created' })
+    return res.status(201).json({ message: 'Created' })
   }
 
   async getByUserId(req: Request, res: Response): Promise<Response> {
