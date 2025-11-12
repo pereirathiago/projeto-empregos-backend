@@ -21,16 +21,19 @@ class UpdateUserUseCase {
         throw new NotFoundError('User not found')
       }
 
-      const newPasswordHash = hash(userData.password, 8)
+      const updateData: any = {
+        name: userData.name,
+        email: userData.email,
+        phone: userData.phone,
+      }
 
-      const newUser = await this.userRepository.update(
-        id,
-        {
-          ...userData,
-          password: await newPasswordHash,
-        },
-        trx,
-      )
+      if (userData.password && userData.password !== '') {
+        updateData.password = await hash(userData.password, 8)
+      } else {
+        updateData.password = userExists.password
+      }
+
+      const newUser = await this.userRepository.update(id, updateData, trx)
 
       return newUser
     })

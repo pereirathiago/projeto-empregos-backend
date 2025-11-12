@@ -68,10 +68,14 @@ const updateJobSeekerValidation: Yup.ObjectSchema<IUpdateJobSeekerUserDTO> = Yup
     .max(150)
     .transform((value) => value?.toUpperCase()),
   password: Yup.string()
-    .required()
-    .min(3)
-    .max(20)
-    .matches(/^[a-zA-Z0-9]+$/, 'invalid_format'),
+    .optional()
+    .nullable()
+    .test('password-validation', 'invalid_format', function (value) {
+      if (!value || value === '') return true
+      if (value.length < 3 || value.length > 20) return false
+      if (!/^[a-zA-Z0-9]+$/.test(value)) return false
+      return true
+    }),
   email: yup.string().optional().nullable().email('invalid_format'),
   phone: Yup.string()
     .optional()

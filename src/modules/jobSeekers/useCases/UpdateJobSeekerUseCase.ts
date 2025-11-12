@@ -15,16 +15,18 @@ class UpdateJobSeekerUseCase {
 
   async execute(userId: number, data: IUpdateJobSeekerUserDTO): Promise<IJobSeeker> {
     const jobSeekerProfile = await this.db.transaction(async (trx) => {
-      const updateUser = await this.updateUserUseCase.execute(
-        userId,
-        {
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          password: data.password,
-        },
-        trx,
-      )
+      const updateUserData = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        password: data.password,
+      }
+
+      if (!updateUserData.password || updateUserData.password === '') {
+        delete updateUserData.password
+      }
+
+      const updateUser = await this.updateUserUseCase.execute(userId, updateUserData as any, trx)
 
       const updatedJobSeeker = await this.jobSeekerRepository.update(
         userId,

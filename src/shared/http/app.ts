@@ -2,6 +2,8 @@ import '@shared/container'
 import cors from 'cors'
 import express from 'express'
 import { errorHandler } from './middleware/errorHandler'
+import { logRequest } from './middleware/logRequest'
+import { logResponse } from './middleware/logResponse'
 import routes from './routes'
 
 const app = express()
@@ -17,8 +19,8 @@ app.use(cors(options))
 
 app.use(express.json())
 
-// app.use(logRequest)
-// app.use(logResponse)
+app.use(logRequest)
+app.use(logResponse)
 
 app.use(routes)
 

@@ -54,8 +54,8 @@ const createCompanyValidation: Yup.ObjectSchema<ICreateCompanyUserDTO> = Yup.obj
     .required()
     .test('phone-validation', 'invalid_format', function (value) {
       if (!value) return false
-      const onlyNumbers = value.replace(/\D/g, '')
-      if (onlyNumbers.length < 10 || onlyNumbers.length > 12) return false
+      if (/[^0-9]/.test(value)) return false 
+      if (value.length < 10 || value.length > 12) return false
       return true
     }),
   business: Yup.string().required().min(4).max(150),
@@ -89,17 +89,21 @@ const updateCompanyValidation: Yup.ObjectSchema<IUpdateCompanyUserDTO> = Yup.obj
     .max(150)
     .transform((value) => value?.toUpperCase()),
   password: Yup.string()
-    .required()
-    .min(3)
-    .max(20)
-    .matches(/^[a-zA-Z0-9]+$/, 'invalid_format'),
+    .optional()
+    .nullable()
+    .test('password-validation', 'invalid_format', function (value) {
+      if (!value || value === '') return true
+      if (value.length < 3 || value.length > 20) return false
+      if (!/^[a-zA-Z0-9]+$/.test(value)) return false
+      return true
+    }),
   email: yup.string().required().min(10).max(150).email('invalid_format'),
   phone: Yup.string()
     .required()
     .test('phone-validation', 'invalid_format', function (value) {
       if (!value) return false
-      const onlyNumbers = value.replace(/\D/g, '')
-      if (onlyNumbers.length < 10 || onlyNumbers.length > 12) return false
+      if (/[^0-9]/.test(value)) return false 
+      if (value.length < 10 || value.length > 12) return false
       return true
     }),
   business: Yup.string().required().min(4).max(150),

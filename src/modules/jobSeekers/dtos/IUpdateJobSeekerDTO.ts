@@ -1,6 +1,6 @@
 interface IUpdateJobSeekerUserDTO {
   name: string
-  password: string
+  password?: string
   phone?: string
   email?: string
   experience?: string

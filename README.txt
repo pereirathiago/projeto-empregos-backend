@@ -20,8 +20,19 @@ COMO EXECUTAR O PROJETO:
    npm install
    (ou: yarn install / pnpm install)
 
-3) Subir o banco de dados com Docker
-   docker-compose up -d
+
+3) Subir o banco de dados
+
+   a) Usando Docker (recomendado)
+      docker-compose up -d
+
+   b) Sem Docker (manual)
+      - Instale o PostgreSQL na sua máquina
+      - Crie o banco e usuário manualmente:
+        psql -U postgres
+        CREATE DATABASE empregos_db;
+        CREATE USER postgres WITH PASSWORD 'postgres';
+        GRANT ALL PRIVILEGES ON DATABASE empregos_db TO postgres;
 
 4) Configurar variáveis de ambiente
    Copie o conteudo do .env.example para um arquivo .env

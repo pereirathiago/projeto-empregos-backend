@@ -101,7 +101,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"madeirinho2\",\r\n    \"password\": \"senha\"\r\n}",
+							"raw": "{\r\n    \"username\": \"madeirinho2\",\r\n    \"password\": \"senha123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -324,7 +324,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Madero 2\",\r\n  \"business\": \"Comida\",\r\n  \"password\": \"senha\",\r\n  \"street\": \"Marquês de Maricá\",\r\n  \"number\": \"1327\",\r\n  \"city\": \"Ponta Grossa\",\r\n  \"state\": \"PR\",\r\n  \"phone\": \"42995443534\",\r\n  \"email\": \"madeirinho2@madeiro.com\"\r\n}",
+							"raw": "{\r\n  \"name\": \"Madero 2\",\r\n  \"business\": \"Comida\",\r\n  \"password\": \"1\",\r\n  \"street\": \"Marquês de Maricá\",\r\n  \"number\": \"1327\",\r\n  \"city\": \"Ponta Grossa\",\r\n  \"state\": \"PR\",\r\n  \"phone\": \"42995443534\",\r\n  \"email\": \"madeirinho2@madeiro.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

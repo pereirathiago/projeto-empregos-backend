@@ -80,9 +80,28 @@ Copie o arquivo `.env.example` para `.env`:
 
 ### 4. Inicie o banco de dados PostgreSQL
 
+#### Usando Docker (recomendado)
+
 ```bash
 docker-compose up -d
 ```
+
+#### Sem Docker (manual)
+
+1. Instale o PostgreSQL na sua máquina
+2. Crie um banco de dados e usuário manualmente:
+
+```bash
+# Acesse o terminal do postgres (pode ser psql ou PgAdmin)
+psql -U postgres
+
+# No prompt do psql, execute:
+CREATE DATABASE empregos_db;
+CREATE USER postgres WITH PASSWORD 'postgres';
+GRANT ALL PRIVILEGES ON DATABASE empregos_db TO postgres;
+```
+
+3. Certifique-se de que as variáveis do seu .env estão corretas para o acesso local.
 
 ### 5. Execute as migrations
 

@@ -1,6 +1,6 @@
 interface IUpdateCompanyUserDTO {
   name: string
-  password: string
+  password?: string
   email: string
   phone: string
   business: string
