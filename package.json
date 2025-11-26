@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon",
     "migrate:latest": "knex migrate:latest",
-    "migrate:rollback": "knex migrate:rollback --all",
+    "migrate:rollback": "knex migrate:rollback ",
     "migrate:make": "knex migrate:make",
     "seed:run": "knex seed:run",
     "seed:make": "knex seed:make"

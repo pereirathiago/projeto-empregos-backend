@@ -4,8 +4,10 @@ import { UserRepository } from '@modules/authentication/repositories/UserReposit
 import { UserSessionRepository } from '@modules/authentication/repositories/UserSessionRepository'
 import { HelloWorldRepository } from '@modules/common/repositories/HelloWorldRepository'
 import { IHelloWorldRepository } from '@modules/common/repositories/interfaces/IHelloWorldRepository'
-import { ICompanyRepository } from '@modules/companies/repositories/interfaces/ICompanyRepository'
 import { CompanyRepository } from '@modules/companies/repositories/CompanyRepository'
+import { ICompanyRepository } from '@modules/companies/repositories/interfaces/ICompanyRepository'
+import { IJobsRepository } from '@modules/jobs/repositories/interfaces/IJobsRepository'
+import { JobsRepository } from '@modules/jobs/repositories/JobsRepository'
 import { IJobSeekerRepository } from '@modules/jobSeekers/repositories/interfaces/IJobSeekerRepository'
 import { JobSeekerRepository } from '@modules/jobSeekers/repositories/JobSeekerRerpository'
 import { db } from '@shared/database/connection'
@@ -17,5 +19,6 @@ container.registerSingleton<IUserRepository>('UserRepository', UserRepository)
 container.registerSingleton<IUserSessionRepository>('UserSessionRepository', UserSessionRepository)
 container.registerSingleton<IJobSeekerRepository>('JobSeekerRepository', JobSeekerRepository)
 container.registerSingleton<ICompanyRepository>('CompanyRepository', CompanyRepository)
+container.registerSingleton<IJobsRepository>('JobsRepository', JobsRepository)
 
 export { container }
