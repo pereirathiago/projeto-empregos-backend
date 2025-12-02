@@ -1,6 +1,9 @@
 import { Knex } from 'knex'
 import { inject, injectable } from 'tsyringe'
 import { ICreateJobDTO } from '../dtos/ICreateJobDTO'
+import { IJobDetailsDTO } from '../dtos/IJobDetailsDTO'
+import { IJobFiltersDTO } from '../dtos/IJobFiltersDTO'
+import { IJobListDTO } from '../dtos/IJobListDTO'
 import { IJob } from '../models/IJob'
 import { IJobsRepository } from './interfaces/IJobsRepository'
 
@@ -30,8 +33,76 @@ class JobsRepository implements IJobsRepository {
     return job
   }
 
+  async findByIdWithDetails(id: number): Promise<IJobDetailsDTO | undefined> {
+    const job = await this.db('jobs as j')
+      .join('companies as c', 'j.company_id', 'c.id')
+      .join('users as u', 'c.user_id', 'u.id')
+      .select(
+        'j.id as job_id',
+        'j.title',
+        'j.area',
+        'j.description',
+        'u.name as company',
+        'j.state',
+        'j.city',
+        'u.email as contact',
+        'j.salary',
+      )
+      .where('j.id', id)
+      .first()
+
+    return job
+  }
+
   async findByCompanyId(company_id: number): Promise<IJob[]> {
     const jobs = await this.db('jobs').where({ company_id })
+
+    return jobs
+  }
+
+  async findByCompanyIdWithFilters(company_id: number, filters: IJobFiltersDTO): Promise<IJobListDTO[]> {
+    let query = this.db('jobs as j')
+      .join('companies as c', 'j.company_id', 'c.id')
+      .join('users as u', 'c.user_id', 'u.id')
+      .select(
+        'j.id as job_id',
+        'j.title',
+        'j.area',
+        'u.name as company',
+        'j.description',
+        'j.state',
+        'j.city',
+        'j.salary',
+        'u.email as contact',
+      )
+      .where('u.id', company_id)
+
+    if (filters.title) {
+      query = query.whereILike('j.title', `%${filters.title}%`)
+    }
+
+    if (filters.area) {
+      query = query.where('j.area', filters.area)
+    }
+
+    if (filters.state) {
+      query = query.where('j.state', filters.state.toUpperCase())
+    }
+
+    if (filters.city) {
+      query = query.whereILike('j.city', `%${filters.city}%`)
+    }
+
+    if (filters.salary_range) {
+      if (filters.salary_range.min !== null && filters.salary_range.min !== undefined) {
+        query = query.where('j.salary', '>=', filters.salary_range.min)
+      }
+      if (filters.salary_range.max !== null && filters.salary_range.max !== undefined) {
+        query = query.where('j.salary', '<=', filters.salary_range.max)
+      }
+    }
+
+    const jobs = await query
 
     return jobs
   }

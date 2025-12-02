@@ -10,5 +10,6 @@ const router = Router()
 const jobController = container.resolve(JobController)
 
 router.post('/', ensureAuthenticated, ensureCompanyRole, validateJob, jobController.create.bind(jobController))
+router.get('/:id', ensureAuthenticated, jobController.getById.bind(jobController))
 
 export default router

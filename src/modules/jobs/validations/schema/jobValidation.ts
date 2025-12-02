@@ -1,4 +1,5 @@
 import { ICreateJobDTO } from '@modules/jobs/dtos/ICreateJobDTO'
+import { IJobFiltersDTO } from '@modules/jobs/dtos/IJobFiltersDTO'
 import * as Yup from 'yup'
 
 const VALID_AREAS = [
@@ -86,4 +87,47 @@ const createJobValidation: Yup.ObjectSchema<Omit<ICreateJobDTO, 'company_id'>> =
     }),
 })
 
-export { createJobValidation }
+const jobFiltersValidation: Yup.ObjectSchema<{ filters: IJobFiltersDTO }> = Yup.object().shape({
+  filters: Yup.object()
+    .shape({
+      title: Yup.string().optional().min(1).max(150),
+      area: Yup.string()
+        .optional()
+        .test('area-validation', 'invalid_area', function (value) {
+          if (!value) return true
+          return VALID_AREAS.includes(value)
+        }),
+      state: Yup.string()
+        .optional()
+        .length(2)
+        .test('state-validation', 'invalid_state', function (value) {
+          if (!value) return true
+          return VALID_STATES.includes(value.toUpperCase())
+        })
+        .transform((value) => (value ? value.toUpperCase() : value)),
+      city: Yup.string().optional().min(2).max(150),
+      salary_range: Yup.object()
+        .optional()
+        .nullable()
+        .shape({
+          min: Yup.number()
+            .optional()
+            .nullable()
+            .test('min-validation', 'must_be_positive', function (value) {
+              if (value === undefined || value === null) return true
+              return value >= 0
+            }),
+          max: Yup.number()
+            .optional()
+            .nullable()
+            .test('max-validation', 'must_be_positive', function (value) {
+              if (value === undefined || value === null) return true
+              return value >= 0
+            }),
+        }),
+    })
+    .optional()
+    .default({}),
+})
+
+export { createJobValidation, jobFiltersValidation }

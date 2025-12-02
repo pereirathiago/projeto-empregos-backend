@@ -1,6 +1,10 @@
+import { ForbiddenError } from '@shared/errors'
 import { Request, Response } from 'express'
 import { container } from 'tsyringe'
+import { IJobFiltersDTO } from '../dtos/IJobFiltersDTO'
 import { CreateJobUseCase } from '../useCases/CreateJobUseCase'
+import { GetJobDetailsUseCase } from '../useCases/GetJobDetailsUseCase'
+import { GetJobsByCompanyUseCase } from '../useCases/GetJobsByCompanyUseCase'
 
 class JobController {
   async create(req: Request, res: Response): Promise<Response> {
@@ -20,6 +24,33 @@ class JobController {
     })
 
     return res.status(201).json({ message: 'Created' })
+  }
+
+  async getById(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params
+
+    const getJobDetailsUseCase = container.resolve(GetJobDetailsUseCase)
+
+    const job = await getJobDetailsUseCase.execute(Number(id))
+
+    return res.status(200).json(job)
+  }
+
+  async getByCompanyId(req: Request, res: Response): Promise<Response> {
+    const { company_id } = req.params
+    const user = req.user
+
+    if (user.id !== company_id) {
+      throw new ForbiddenError()
+    }
+
+    const filters: IJobFiltersDTO = req.body.filters || {}
+
+    const getJobsByCompanyUseCase = container.resolve(GetJobsByCompanyUseCase)
+
+    const jobs = await getJobsByCompanyUseCase.execute(Number(company_id), filters)
+
+    return res.status(200).json({ items: jobs })
   }
 }
 
