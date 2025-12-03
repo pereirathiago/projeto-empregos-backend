@@ -1,6 +1,7 @@
 import { config } from '@config/index'
 import { UnauthorizedError } from '@shared/errors'
 import { AppError } from '@shared/errors/app-error'
+import { logService } from '@shared/services/LogService'
 import { compare } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import { inject, injectable } from 'tsyringe'
@@ -53,6 +54,11 @@ class AuthenticateUserUseCase {
       user_id: user.id,
       token,
       expires_at: expiresAt,
+    })
+
+    logService.info(`Usuário logado: ${user.name} (@${user.username})`, {
+      userId: user.id,
+      role: user.role,
     })
 
     return {

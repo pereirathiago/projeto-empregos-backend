@@ -1,4 +1,5 @@
 import { config } from '@config/index'
+import { logService } from '@shared/services/LogService'
 import * as readline from 'readline'
 import 'reflect-metadata'
 import app from './app'
@@ -29,12 +30,15 @@ function promptPort(): Promise<number> {
 
 function startServer(port: number) {
   app.listen(port, '0.0.0.0', () => {
+    logService.info(`Servidor iniciado na porta ${port}`)
+    logService.info(`Health Dashboard disponível em http://localhost:${port}/health`)
     console.log(`Server is running on port ${port}`)
+    console.log(`Health Dashboard: http://localhost:${port}/health`)
   })
 }
 
-// promptPort().then((port) => {
-//   startServer(port)
-// })
+promptPort().then((port) => {
+  startServer(port)
+})
 
-startServer(defaultPort)
+// startServer(defaultPort)

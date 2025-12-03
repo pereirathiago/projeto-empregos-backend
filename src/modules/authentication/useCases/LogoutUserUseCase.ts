@@ -1,4 +1,5 @@
 import { AppError } from '@shared/errors/app-error'
+import { logService } from '@shared/services/LogService'
 import { inject, injectable } from 'tsyringe'
 import { IUserSessionRepository } from '../repositories/interfaces/IUserSessionRepository'
 
@@ -12,6 +13,8 @@ class LogoutUserUseCase {
     if (!deleted) {
       throw new AppError('Failed to logout user', 500)
     }
+
+    logService.info('Usuário deslogado')
   }
 }
 

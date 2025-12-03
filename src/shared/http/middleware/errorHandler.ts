@@ -1,9 +1,13 @@
 import { ValidationError } from '@shared/errors'
 import { AppError } from '@shared/errors/app-error'
+import { logService } from '@shared/services/LogService'
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
 import * as Yup from 'yup'
 
 const errorHandler: ErrorRequestHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
+  logService.error(`ERROR: ${req.method} ${req.url} - ${err.message}`, {
+    stack: err.stack,
+  })
   console.error(err)
 
   if (err instanceof Yup.ValidationError) {
