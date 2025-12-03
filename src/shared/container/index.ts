@@ -6,6 +6,8 @@ import { HelloWorldRepository } from '@modules/common/repositories/HelloWorldRep
 import { IHelloWorldRepository } from '@modules/common/repositories/interfaces/IHelloWorldRepository'
 import { CompanyRepository } from '@modules/companies/repositories/CompanyRepository'
 import { ICompanyRepository } from '@modules/companies/repositories/interfaces/ICompanyRepository'
+import { ErrorLogRepository } from '@modules/errorLogs/repositories/ErrorLogRepository'
+import { IErrorLogRepository } from '@modules/errorLogs/repositories/interfaces/IErrorLogRepository'
 import { IJobsRepository } from '@modules/jobs/repositories/interfaces/IJobsRepository'
 import { JobsRepository } from '@modules/jobs/repositories/JobsRepository'
 import { IJobSeekerRepository } from '@modules/jobSeekers/repositories/interfaces/IJobSeekerRepository'
@@ -20,5 +22,6 @@ container.registerSingleton<IUserSessionRepository>('UserSessionRepository', Use
 container.registerSingleton<IJobSeekerRepository>('JobSeekerRepository', JobSeekerRepository)
 container.registerSingleton<ICompanyRepository>('CompanyRepository', CompanyRepository)
 container.registerSingleton<IJobsRepository>('JobsRepository', JobsRepository)
+container.registerSingleton<IErrorLogRepository>('ErrorLogRepository', ErrorLogRepository)
 
 export { container }
