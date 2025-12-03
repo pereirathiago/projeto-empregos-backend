@@ -178,6 +178,10 @@ class JobsRepository implements IJobsRepository {
 
     return updatedJob
   }
+
+  async delete(id: number): Promise<void> {
+    await this.db('jobs').where({ id }).delete()
+  }
 }
 
 export { JobsRepository }

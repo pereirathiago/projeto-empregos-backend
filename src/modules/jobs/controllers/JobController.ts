@@ -7,6 +7,7 @@ import { GetJobDetailsUseCase } from '../useCases/GetJobDetailsUseCase'
 import { GetJobsByCompanyUseCase } from '../useCases/GetJobsByCompanyUseCase'
 import { SearchAllJobsUseCase } from '../useCases/SearchAllJobsUseCase'
 import { UpdateJobUseCase } from '../useCases/UpdateJobUseCase'
+import { DeleteJobUseCase } from '../useCases/DeleteJobUseCase'
 
 class JobController {
   async create(req: Request, res: Response): Promise<Response> {
@@ -80,6 +81,17 @@ class JobController {
     })
 
     return res.status(200).json({ message: 'Job updated successfully' })
+  }
+
+  async delete(req: Request, res: Response): Promise<Response> {
+    const { job_id } = req.params
+    const user = req.user
+
+    const deleteJobUseCase = container.resolve(DeleteJobUseCase)
+
+    await deleteJobUseCase.execute(Number(job_id), user.id)
+
+    return res.status(200).json({ message: 'Job deleted successfully' })
   }
 }
 

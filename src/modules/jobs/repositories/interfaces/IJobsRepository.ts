@@ -13,6 +13,7 @@ interface IJobsRepository {
   findByCompanyIdWithFilters(company_id: number, filters: IJobFiltersDTO): Promise<IJobListDTO[]>
   searchAllWithFilters(filters: IJobFiltersDTO): Promise<IJobListDTO[]>
   update(id: number, data: IUpdateJobDTO): Promise<IJob>
+  delete(id: number): Promise<void>
 }
 
 export { IJobsRepository }

@@ -19,5 +19,6 @@ router.patch(
   validateUpdateJob,
   jobController.update.bind(jobController),
 )
+router.delete('/:job_id', ensureAuthenticated, ensureCompanyRole, jobController.delete.bind(jobController))
 
 export default router
