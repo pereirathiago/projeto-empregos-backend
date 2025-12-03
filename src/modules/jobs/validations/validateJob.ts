@@ -11,6 +11,16 @@ async function validateJob(req: Request, _res: Response, next: NextFunction) {
   next()
 }
 
+async function validateUpdateJob(req: Request, _res: Response, next: NextFunction) {
+  const validatedData = await createJobValidation.validate(req.body, {
+    abortEarly: false,
+    stripUnknown: true,
+  })
+
+  req.body = validatedData
+  next()
+}
+
 async function validateJobFilters(req: Request, _res: Response, next: NextFunction) {
   const validatedData = await searchJobsValidation.validate(req.body, {
     abortEarly: false,
@@ -31,4 +41,4 @@ async function validateSearchJobs(req: Request, _res: Response, next: NextFuncti
   next()
 }
 
-export { validateJob, validateJobFilters, validateSearchJobs }
+export { validateJob, validateJobFilters, validateSearchJobs, validateUpdateJob }

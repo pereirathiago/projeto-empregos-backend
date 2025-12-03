@@ -4,6 +4,7 @@ import { ICreateJobDTO } from '../dtos/ICreateJobDTO'
 import { IJobDetailsDTO } from '../dtos/IJobDetailsDTO'
 import { IJobFiltersDTO } from '../dtos/IJobFiltersDTO'
 import { IJobListDTO } from '../dtos/IJobListDTO'
+import { IUpdateJobDTO } from '../dtos/IUpdateJobDTO'
 import { IJob } from '../models/IJob'
 import { IJobsRepository } from './interfaces/IJobsRepository'
 
@@ -159,6 +160,23 @@ class JobsRepository implements IJobsRepository {
     const jobs = await query
 
     return jobs
+  }
+
+  async update(id: number, data: IUpdateJobDTO): Promise<IJob> {
+    const [updatedJob] = await this.db('jobs')
+      .where({ id })
+      .update({
+        title: data.title,
+        area: data.area,
+        description: data.description,
+        state: data.state,
+        city: data.city,
+        salary: data.salary || null,
+        updated_at: this.db.fn.now(),
+      })
+      .returning('*')
+
+    return updatedJob
   }
 }
 
