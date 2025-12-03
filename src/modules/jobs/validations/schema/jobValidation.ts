@@ -195,4 +195,12 @@ const searchJobsValidation: Yup.ObjectSchema<{ filters: IJobFiltersDTO[] }> = Yu
     ),
 })
 
-export { createJobValidation, jobFiltersValidation, searchJobsValidation }
+const applyToJobValidation = Yup.object().shape({
+  name: Yup.string().required().min(1).max(150),
+  email: Yup.string().optional().email(),
+  phone: Yup.string().optional().min(8).max(20),
+  education: Yup.string().required().min(1).max(600),
+  experience: Yup.string().required().min(1).max(600),
+})
+
+export { applyToJobValidation, createJobValidation, jobFiltersValidation, searchJobsValidation }

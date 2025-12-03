@@ -2,12 +2,13 @@ import { ForbiddenError } from '@shared/errors'
 import { Request, Response } from 'express'
 import { container } from 'tsyringe'
 import { IJobFiltersDTO } from '../dtos/IJobFiltersDTO'
+import { ApplyToJobUseCase } from '../useCases/ApplyToJobUseCase'
 import { CreateJobUseCase } from '../useCases/CreateJobUseCase'
+import { DeleteJobUseCase } from '../useCases/DeleteJobUseCase'
 import { GetJobDetailsUseCase } from '../useCases/GetJobDetailsUseCase'
 import { GetJobsByCompanyUseCase } from '../useCases/GetJobsByCompanyUseCase'
 import { SearchAllJobsUseCase } from '../useCases/SearchAllJobsUseCase'
 import { UpdateJobUseCase } from '../useCases/UpdateJobUseCase'
-import { DeleteJobUseCase } from '../useCases/DeleteJobUseCase'
 
 class JobController {
   async create(req: Request, res: Response): Promise<Response> {
@@ -92,6 +93,26 @@ class JobController {
     await deleteJobUseCase.execute(Number(job_id), user.id)
 
     return res.status(200).json({ message: 'Job deleted successfully' })
+  }
+
+  async apply(req: Request, res: Response): Promise<Response> {
+    const { job_id } = req.params
+    const user = req.user
+    const data = req.body
+
+    const applyToJobUseCase = container.resolve(ApplyToJobUseCase)
+
+    await applyToJobUseCase.execute({
+      job_id: Number(job_id),
+      user_id: Number(user.id),
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      education: data.education,
+      experience: data.experience,
+    })
+
+    return res.status(200).json({ message: 'Applied succesfully' })
   }
 }
 

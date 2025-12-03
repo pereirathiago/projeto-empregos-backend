@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { createJobValidation, searchJobsValidation } from './schema/jobValidation'
+import { applyToJobValidation, createJobValidation, searchJobsValidation } from './schema/jobValidation'
 
 async function validateJob(req: Request, _res: Response, next: NextFunction) {
   const validatedData = await createJobValidation.validate(req.body, {
@@ -41,4 +41,14 @@ async function validateSearchJobs(req: Request, _res: Response, next: NextFuncti
   next()
 }
 
-export { validateJob, validateJobFilters, validateSearchJobs, validateUpdateJob }
+async function validateApplyToJob(req: Request, _res: Response, next: NextFunction) {
+  const validatedData = await applyToJobValidation.validate(req.body, {
+    abortEarly: false,
+    stripUnknown: true,
+  })
+
+  req.body = validatedData
+  next()
+}
+
+export { validateApplyToJob, validateJob, validateJobFilters, validateSearchJobs, validateUpdateJob }

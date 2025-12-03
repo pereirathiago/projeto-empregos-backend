@@ -1,9 +1,11 @@
+import { IApplyToJobDTO } from '@modules/jobs/dtos/IApplyToJobDTO'
 import { ICreateJobDTO } from '@modules/jobs/dtos/ICreateJobDTO'
 import { IJobDetailsDTO } from '@modules/jobs/dtos/IJobDetailsDTO'
 import { IJobFiltersDTO } from '@modules/jobs/dtos/IJobFiltersDTO'
 import { IJobListDTO } from '@modules/jobs/dtos/IJobListDTO'
 import { IUpdateJobDTO } from '@modules/jobs/dtos/IUpdateJobDTO'
 import { IJob } from '@modules/jobs/models/IJob'
+import { IJobApplication } from '@modules/jobs/models/IJobApplication'
 
 interface IJobsRepository {
   create(data: ICreateJobDTO): Promise<IJob>
@@ -14,6 +16,7 @@ interface IJobsRepository {
   searchAllWithFilters(filters: IJobFiltersDTO): Promise<IJobListDTO[]>
   update(id: number, data: IUpdateJobDTO): Promise<IJob>
   delete(id: number): Promise<void>
+  applyToJob(data: IApplyToJobDTO): Promise<IJobApplication>
 }
 
 export { IJobsRepository }

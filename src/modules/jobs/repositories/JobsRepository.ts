@@ -1,11 +1,13 @@
 import { Knex } from 'knex'
 import { inject, injectable } from 'tsyringe'
+import { IApplyToJobDTO } from '../dtos/IApplyToJobDTO'
 import { ICreateJobDTO } from '../dtos/ICreateJobDTO'
 import { IJobDetailsDTO } from '../dtos/IJobDetailsDTO'
 import { IJobFiltersDTO } from '../dtos/IJobFiltersDTO'
 import { IJobListDTO } from '../dtos/IJobListDTO'
 import { IUpdateJobDTO } from '../dtos/IUpdateJobDTO'
 import { IJob } from '../models/IJob'
+import { IJobApplication } from '../models/IJobApplication'
 import { IJobsRepository } from './interfaces/IJobsRepository'
 
 @injectable()
@@ -181,6 +183,22 @@ class JobsRepository implements IJobsRepository {
 
   async delete(id: number): Promise<void> {
     await this.db('jobs').where({ id }).delete()
+  }
+
+  async applyToJob(data: IApplyToJobDTO): Promise<IJobApplication> {
+    const [application] = await this.db('job_applications')
+      .insert({
+        job_id: data.job_id,
+        user_id: data.user_id,
+        name: data.name,
+        email: data.email || null,
+        phone: data.phone || null,
+        education: data.education,
+        experience: data.experience,
+      })
+      .returning('*')
+
+    return application
   }
 }
 
