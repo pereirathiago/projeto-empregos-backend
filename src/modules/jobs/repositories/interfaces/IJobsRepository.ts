@@ -10,6 +10,7 @@ interface IJobsRepository {
   findByIdWithDetails(id: number): Promise<IJobDetailsDTO | undefined>
   findByCompanyId(company_id: number): Promise<IJob[]>
   findByCompanyIdWithFilters(company_id: number, filters: IJobFiltersDTO): Promise<IJobListDTO[]>
+  searchAllWithFilters(filters: IJobFiltersDTO): Promise<IJobListDTO[]>
 }
 
 export { IJobsRepository }

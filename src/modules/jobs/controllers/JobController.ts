@@ -5,6 +5,7 @@ import { IJobFiltersDTO } from '../dtos/IJobFiltersDTO'
 import { CreateJobUseCase } from '../useCases/CreateJobUseCase'
 import { GetJobDetailsUseCase } from '../useCases/GetJobDetailsUseCase'
 import { GetJobsByCompanyUseCase } from '../useCases/GetJobsByCompanyUseCase'
+import { SearchAllJobsUseCase } from '../useCases/SearchAllJobsUseCase'
 
 class JobController {
   async create(req: Request, res: Response): Promise<Response> {
@@ -49,6 +50,15 @@ class JobController {
     const getJobsByCompanyUseCase = container.resolve(GetJobsByCompanyUseCase)
 
     const jobs = await getJobsByCompanyUseCase.execute(Number(company_id), filters)
+
+    return res.status(200).json({ items: jobs })
+  }
+
+  async searchAll(req: Request, res: Response): Promise<Response> {
+    const filters: IJobFiltersDTO[] = req.body.filters || []
+    const searchAllJobsUseCase = container.resolve(SearchAllJobsUseCase)
+
+    const jobs = await searchAllJobsUseCase.execute(filters[0] || {})
 
     return res.status(200).json({ items: jobs })
   }

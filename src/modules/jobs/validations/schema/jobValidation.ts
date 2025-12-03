@@ -70,13 +70,12 @@ const createJobValidation: Yup.ObjectSchema<Omit<ICreateJobDTO, 'company_id'>> =
   description: Yup.string().required().min(10).max(5000),
   state: Yup.string()
     .required()
-    .length(2)
     .test('state-validation', 'invalid_state', function (value) {
       if (!value) return false
       return VALID_STATES.includes(value.toUpperCase())
     })
     .transform((value) => value?.toUpperCase()),
-  city: Yup.string().required().min(2).max(150),
+  city: Yup.string().required(),
   salary: Yup.number()
     .optional()
     .nullable()
@@ -130,4 +129,70 @@ const jobFiltersValidation: Yup.ObjectSchema<{ filters: IJobFiltersDTO }> = Yup.
     .default({}),
 })
 
-export { createJobValidation, jobFiltersValidation }
+const searchJobsValidation: Yup.ObjectSchema<{ filters: IJobFiltersDTO[] }> = Yup.object().shape({
+  filters: Yup.array()
+    .max(1)
+    .optional()
+    .of(
+      Yup.object()
+        .shape({
+          title: Yup.string()
+            .optional()
+            .transform((value) => (!value || value === '' ? undefined : value))
+            .min(1)
+            .max(150),
+          area: Yup.string()
+            .optional()
+            .transform((value) => (!value || value === '' ? undefined : value))
+            .test('area-validation', 'invalid_area', function (value) {
+              if (!value) return true
+              return VALID_AREAS.includes(value)
+            }),
+          company: Yup.string()
+            .optional()
+            .transform((value) => (!value || value === '' ? undefined : value))
+            .min(1)
+            .max(150),
+          state: Yup.string()
+            .optional()
+            .transform((value) => (!value || value === '' ? undefined : value))
+            .test('state-validation', 'invalid_state', function (value) {
+              if (!value) return true
+              return VALID_STATES.includes(value.toUpperCase())
+            })
+            .transform((value) => (value ? value.toUpperCase() : value)),
+          city: Yup.string()
+            .optional()
+            .transform((value) => (!value || value === '' ? undefined : value)),
+          salary_range: Yup.object()
+            .optional()
+            .nullable()
+            .shape({
+              min: Yup.number()
+                .optional()
+                .nullable()
+                .transform((value) => (value === 0 || value === null || value === undefined ? undefined : value))
+                .test('min-validation', 'must_be_positive', function (value) {
+                  if (value === undefined || value === null) return true
+                  return value >= 0
+                }),
+              max: Yup.number()
+                .optional()
+                .nullable()
+                .transform((value) => (value === 0 || value === null || value === undefined ? undefined : value))
+                .test('max-validation', 'must_be_positive', function (value) {
+                  if (value === undefined || value === null) return true
+                  return value >= 0
+                }),
+            })
+            .transform((value) => {
+              if (!value || (value.min === undefined && value.max === undefined)) return undefined
+              return value
+            }),
+        })
+        .optional()
+        .default({}),
+    ),
+})
+
+export { createJobValidation, jobFiltersValidation, searchJobsValidation }

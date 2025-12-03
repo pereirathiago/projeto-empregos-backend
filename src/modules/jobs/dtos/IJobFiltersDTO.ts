@@ -1,6 +1,7 @@
 interface IJobFiltersDTO {
   title?: string
   area?: string
+  company?: string
   state?: string
   city?: string
   salary_range?: {

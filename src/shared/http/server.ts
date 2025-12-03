@@ -33,8 +33,8 @@ function startServer(port: number) {
   })
 }
 
-promptPort().then((port) => {
-  startServer(port)
-})
+// promptPort().then((port) => {
+//   startServer(port)
+// })
 
-// startServer(defaultPort)
+startServer(defaultPort)
