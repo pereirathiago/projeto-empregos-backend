@@ -39,7 +39,7 @@ class CompanyRepository implements ICompanyRepository {
   async findById(id: number, trx?: Knex.Transaction): Promise<ICompany | undefined> {
     const connection = trx || this.db
 
-    const company = await connection('companies').where({ id }).first()
+    const company = await connection('companies').where({ user_id: id }).first()
 
     return company
   }

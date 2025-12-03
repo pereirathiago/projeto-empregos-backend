@@ -1,7 +1,10 @@
 interface IJobCandidateDTO {
   user_id: number
-  user_name: string
-  email: string
+  name: string
+  email: string | null
+  phone: string | null
+  education: string
+  experience: string
   feedback: string | null
 }
 

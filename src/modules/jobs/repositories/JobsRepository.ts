@@ -38,10 +38,9 @@ class JobsRepository implements IJobsRepository {
 
     return job
   }
-
   async findByIdWithDetails(id: number): Promise<IJobDetailsDTO | undefined> {
     const job = await this.db('jobs as j')
-      .join('companies as c', 'j.company_id', 'c.id')
+      .join('companies as c', 'j.company_id', 'c.user_id')
       .join('users as u', 'c.user_id', 'u.id')
       .select(
         'j.id as job_id',
@@ -52,12 +51,17 @@ class JobsRepository implements IJobsRepository {
         'j.state',
         'j.city',
         'u.email as contact',
-        'j.salary',
+        this.db.raw('CAST(j.salary AS DOUBLE PRECISION) as salary'),
       )
       .where('j.id', id)
       .first()
 
-    return job
+    if (!job) return undefined
+
+    return {
+      ...job,
+      salary: job.salary !== null ? Number(job.salary) : null,
+    }
   }
 
   async findByCompanyId(company_id: number): Promise<IJob[]> {
@@ -68,7 +72,7 @@ class JobsRepository implements IJobsRepository {
 
   async findByCompanyIdWithFilters(company_id: number, filters: IJobFiltersDTO): Promise<IJobListDTO[]> {
     let query = this.db('jobs as j')
-      .join('companies as c', 'j.company_id', 'c.id')
+      .join('companies as c', 'j.company_id', 'c.user_id')
       .join('users as u', 'c.user_id', 'u.id')
       .select(
         'j.id as job_id',
@@ -78,10 +82,10 @@ class JobsRepository implements IJobsRepository {
         'j.description',
         'j.state',
         'j.city',
-        'j.salary',
+        this.db.raw('CAST(j.salary AS DOUBLE PRECISION) as salary'),
         'u.email as contact',
       )
-      .where('c.id', company_id)
+      .where('j.company_id', company_id)
 
     if (filters.title) {
       query = query.whereILike('j.title', `%${filters.title}%`)
@@ -114,12 +118,15 @@ class JobsRepository implements IJobsRepository {
 
     const jobs = await query
 
-    return jobs
+    return jobs.map((job) => ({
+      ...job,
+      salary: job.salary !== null ? Number(job.salary) : null,
+    }))
   }
 
   async searchAllWithFilters(filters: IJobFiltersDTO): Promise<IJobListDTO[]> {
     let query = this.db('jobs as j')
-      .join('companies as c', 'j.company_id', 'c.id')
+      .join('companies as c', 'j.company_id', 'c.user_id')
       .join('users as u', 'c.user_id', 'u.id')
       .select(
         'j.id as job_id',
@@ -129,7 +136,7 @@ class JobsRepository implements IJobsRepository {
         'j.description',
         'j.state',
         'j.city',
-        'j.salary',
+        this.db.raw('CAST(j.salary AS DOUBLE PRECISION) as salary'),
         'u.email as contact',
       )
 
@@ -164,7 +171,10 @@ class JobsRepository implements IJobsRepository {
 
     const jobs = await query
 
-    return jobs
+    return jobs.map((job) => ({
+      ...job,
+      salary: job.salary !== null ? Number(job.salary) : null,
+    }))
   }
 
   async update(id: number, data: IUpdateJobDTO): Promise<IJob> {
@@ -214,7 +224,7 @@ class JobsRepository implements IJobsRepository {
   async getUserApplications(user_id: number): Promise<IUserApplicationDTO[]> {
     const applications = await this.db('job_applications as ja')
       .join('jobs as j', 'ja.job_id', 'j.id')
-      .join('companies as c', 'j.company_id', 'c.id')
+      .join('companies as c', 'j.company_id', 'c.user_id')
       .join('users as u', 'c.user_id', 'u.id')
       .select(
         'j.id as job_id',
@@ -224,19 +234,21 @@ class JobsRepository implements IJobsRepository {
         'j.description',
         'j.state',
         'j.city',
-        'j.salary',
+        this.db.raw('CAST(j.salary AS DOUBLE PRECISION) as salary'),
         'u.email as contact',
         'ja.feedback',
       )
       .where('ja.user_id', user_id)
 
-    return applications
+    return applications.map((app) => ({
+      ...app,
+      salary: app.salary !== null ? Number(app.salary) : null,
+    }))
   }
 
   async getJobCandidates(job_id: number): Promise<IJobCandidateDTO[]> {
     const candidates = await this.db('job_applications as ja')
-      .join('users as u', 'ja.user_id', 'u.id')
-      .select('u.id as user_id', 'ja.name as user_name', 'u.email', 'ja.feedback')
+      .select('ja.user_id', 'ja.name', 'ja.email', 'ja.phone', 'ja.education', 'ja.experience', 'ja.feedback')
       .where('ja.job_id', job_id)
 
     return candidates

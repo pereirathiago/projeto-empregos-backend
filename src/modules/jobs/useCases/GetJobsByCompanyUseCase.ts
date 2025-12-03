@@ -13,8 +13,7 @@ class GetJobsByCompanyUseCase {
   ) {}
 
   async execute(company_id: number, user_id: string, filters: IJobFiltersDTO): Promise<IJobListDTO[]> {
-    const company = await this.companyRepository.findById(company_id)
-
+    const company = await this.companyRepository.getByUserId(company_id)
     if (!company) {
       throw new NotFoundError('Job not found')
     }
