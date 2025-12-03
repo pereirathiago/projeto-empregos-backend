@@ -7,6 +7,7 @@ interface IJobApplication {
   phone: string | null
   education: string
   experience: string
+  feedback: string | null
   created_at: Date
   updated_at: Date
 }

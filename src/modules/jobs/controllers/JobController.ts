@@ -5,9 +5,12 @@ import { IJobFiltersDTO } from '../dtos/IJobFiltersDTO'
 import { ApplyToJobUseCase } from '../useCases/ApplyToJobUseCase'
 import { CreateJobUseCase } from '../useCases/CreateJobUseCase'
 import { DeleteJobUseCase } from '../useCases/DeleteJobUseCase'
+import { GetJobCandidatesUseCase } from '../useCases/GetJobCandidatesUseCase'
 import { GetJobDetailsUseCase } from '../useCases/GetJobDetailsUseCase'
 import { GetJobsByCompanyUseCase } from '../useCases/GetJobsByCompanyUseCase'
+import { GetUserApplicationsUseCase } from '../useCases/GetUserApplicationsUseCase'
 import { SearchAllJobsUseCase } from '../useCases/SearchAllJobsUseCase'
+import { SendFeedbackUseCase } from '../useCases/SendFeedbackUseCase'
 import { UpdateJobUseCase } from '../useCases/UpdateJobUseCase'
 
 class JobController {
@@ -113,6 +116,48 @@ class JobController {
     })
 
     return res.status(200).json({ message: 'Applied succesfully' })
+  }
+
+  async sendFeedback(req: Request, res: Response): Promise<Response> {
+    const { job_id } = req.params
+    const user = req.user
+    const data = req.body
+
+    const sendFeedbackUseCase = container.resolve(SendFeedbackUseCase)
+
+    await sendFeedbackUseCase.execute(Number(job_id), Number(user.id), {
+      user_id: data.user_id,
+      job_id: Number(job_id),
+      message: data.message,
+    })
+
+    return res.status(200).json({ message: 'Feedback sent successfully' })
+  }
+
+  async getUserApplications(req: Request, res: Response): Promise<Response> {
+    const { user_id } = req.params
+    const user = req.user
+
+    const getUserApplicationsUseCase = container.resolve(GetUserApplicationsUseCase)
+
+    const applications = await getUserApplicationsUseCase.execute(Number(user_id), Number(user.id))
+
+    return res.status(200).json({ items: applications })
+  }
+
+  async getJobCandidates(req: Request, res: Response): Promise<Response> {
+    const { company_id, job_id } = req.params
+    const user = req.user
+
+    if (user.id != company_id) {
+      throw new ForbiddenError()
+    }
+
+    const getJobCandidatesUseCase = container.resolve(GetJobCandidatesUseCase)
+
+    const candidates = await getJobCandidatesUseCase.execute(Number(job_id), Number(company_id))
+
+    return res.status(200).json({ items: candidates })
   }
 }
 

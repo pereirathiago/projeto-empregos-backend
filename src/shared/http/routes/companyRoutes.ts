@@ -31,4 +31,11 @@ router.post(
   jobController.getByCompanyId.bind(jobController),
 )
 
+router.get(
+  '/:company_id/jobs/:job_id',
+  ensureAuthenticated,
+  ensureCompanyRole,
+  jobController.getJobCandidates.bind(jobController),
+)
+
 export default router

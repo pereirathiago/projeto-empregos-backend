@@ -1,4 +1,5 @@
 import { JobController } from '@modules/jobs/controllers/JobController'
+import { feedbackValidation } from '@modules/jobs/validations/validateFeedback'
 import { validateApplyToJob, validateJob, validateSearchJobs, validateUpdateJob } from '@modules/jobs/validations/validateJob'
 import { Router } from 'express'
 import { container } from 'tsyringe'
@@ -12,6 +13,20 @@ const jobController = container.resolve(JobController)
 
 router.post('/', ensureAuthenticated, ensureCompanyRole, validateJob, jobController.create.bind(jobController))
 router.post('/search', ensureAuthenticated, validateSearchJobs, jobController.searchAll.bind(jobController))
+router.post(
+  '/:job_id/feedback',
+  ensureAuthenticated,
+  ensureCompanyRole,
+  async (req, res, next) => {
+    try {
+      await feedbackValidation(req.body)
+      next()
+    } catch (error) {
+      res.status(400).json({ errors: error })
+    }
+  },
+  jobController.sendFeedback.bind(jobController),
+)
 router.post('/:job_id', ensureAuthenticated, ensureUserRole, validateApplyToJob, jobController.apply.bind(jobController))
 router.get('/:id', ensureAuthenticated, jobController.getById.bind(jobController))
 router.patch('/:job_id', ensureAuthenticated, ensureCompanyRole, validateUpdateJob, jobController.update.bind(jobController))

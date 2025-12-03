@@ -2,10 +2,13 @@ import { Knex } from 'knex'
 import { inject, injectable } from 'tsyringe'
 import { IApplyToJobDTO } from '../dtos/IApplyToJobDTO'
 import { ICreateJobDTO } from '../dtos/ICreateJobDTO'
+import { IJobCandidateDTO } from '../dtos/IJobCandidateDTO'
 import { IJobDetailsDTO } from '../dtos/IJobDetailsDTO'
 import { IJobFiltersDTO } from '../dtos/IJobFiltersDTO'
 import { IJobListDTO } from '../dtos/IJobListDTO'
+import { ISendFeedbackDTO } from '../dtos/ISendFeedbackDTO'
 import { IUpdateJobDTO } from '../dtos/IUpdateJobDTO'
+import { IUserApplicationDTO } from '../dtos/IUserApplicationDTO'
 import { IJob } from '../models/IJob'
 import { IJobApplication } from '../models/IJobApplication'
 import { IJobsRepository } from './interfaces/IJobsRepository'
@@ -199,6 +202,44 @@ class JobsRepository implements IJobsRepository {
       .returning('*')
 
     return application
+  }
+
+  async sendFeedback(data: ISendFeedbackDTO): Promise<void> {
+    await this.db('job_applications').where({ job_id: data.job_id, user_id: data.user_id }).update({
+      feedback: data.message,
+      updated_at: this.db.fn.now(),
+    })
+  }
+
+  async getUserApplications(user_id: number): Promise<IUserApplicationDTO[]> {
+    const applications = await this.db('job_applications as ja')
+      .join('jobs as j', 'ja.job_id', 'j.id')
+      .join('companies as c', 'j.company_id', 'c.id')
+      .join('users as u', 'c.user_id', 'u.id')
+      .select(
+        'j.id as job_id',
+        'j.title',
+        'j.area',
+        'u.name as company',
+        'j.description',
+        'j.state',
+        'j.city',
+        'j.salary',
+        'u.email as contact',
+        'ja.feedback',
+      )
+      .where('ja.user_id', user_id)
+
+    return applications
+  }
+
+  async getJobCandidates(job_id: number): Promise<IJobCandidateDTO[]> {
+    const candidates = await this.db('job_applications as ja')
+      .join('users as u', 'ja.user_id', 'u.id')
+      .select('u.id as user_id', 'ja.name as user_name', 'u.email', 'ja.feedback')
+      .where('ja.job_id', job_id)
+
+    return candidates
   }
 }
 
