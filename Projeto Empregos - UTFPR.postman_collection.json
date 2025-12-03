@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9ec8aa66-7d61-42ed-ae3c-84853ab44d86",
+		"_postman_id": "d99417cc-7148-43d4-8fb3-3726aa91f704",
 		"name": "Projeto Empregos - UTFPR",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "19989855"
@@ -101,7 +101,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"madeirinho2\",\r\n    \"password\": \"senha123\"\r\n}",
+							"raw": "{\r\n    \"username\": \"empsis\",\r\n    \"password\": \"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -264,6 +264,43 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Listar candidaturas do usuario",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": 2,\r\n    \"message\": \"Gostamos do seu perfil, vamos agendar entrevista.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/users/:user_id/jobs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								":user_id",
+								"jobs"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -280,7 +317,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Madero\",\r\n  \"business\": \"Comida\",\r\n  \"username\": \"madeirinho2.\",\r\n  \"password\": \"1 \",\r\n  \"street\": \"Marquês de Maricá\",\r\n  \"number\": \"1328\",\r\n  \"city\": \"Ponta Grossa\",\r\n  \"state\": \"PR\",\r\n  \"phone\": \"42995443534\",\r\n  \"email\": \"madeirinho2@madeiro.com\"\r\n}",
+							"raw": "{\r\n  \"name\": \"Madero 2\",\r\n  \"business\": \"Comida\",\r\n  \"username\": \"madeirinho2\",\r\n  \"password\": \"123\",\r\n  \"street\": \"Marquês de Maricá\",\r\n  \"number\": \"1328\",\r\n  \"city\": \"Ponta Grossa\",\r\n  \"state\": \"PR\",\r\n  \"phone\": \"42995443534\",\r\n  \"email\": \"madeirinho2@madeiro.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -361,8 +398,310 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Buscar vagas da empresa com filtros",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"filters\": [\r\n        { \r\n            \"title\": \"\",\r\n            \"area\":\"\",\r\n            \"state\": \"\",\r\n            \"city\": \"\",\r\n            \"salary_range\": { \"min\": 0, \"max\": null }\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/companies/6/jobs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"companies",
+								"6",
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar candidaturas do usuario Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": 2,\r\n    \"message\": \"Gostamos do seu perfil, vamos agendar entrevista.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/companies/:company_id/jobs/:jobs_id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"companies",
+								":company_id",
+								"jobs",
+								":jobs_id"
+							],
+							"variable": [
+								{
+									"key": "company_id",
+									"value": "6"
+								},
+								{
+									"key": "jobs_id",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
+		},
+		{
+			"name": "Jobs",
+			"item": [
+				{
+					"name": "Cadastro de vagas",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Auxiliar de Produção\",\r\n  \"area\": \"Produção\",\r\n  \"description\": \"Auxilia na linha de produção, organização e conferência.\",\r\n  \"state\": \"PR\",\r\n  \"city\": \"Ponta Grossa\",\r\n  \"salary\": 1800.00\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/jobs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Vaga por Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/jobs/:jobid",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								":jobid"
+							],
+							"variable": [
+								{
+									"key": "jobid",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar vagas com filtros",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"filters\": [\r\n        { \r\n            \"title\": \"\",\r\n            \"area\":\"\",\r\n            \"state\": \"\",\r\n            \"city\": \"\",\r\n            \"salary_range\": { \"min\": null, \"max\": null}\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/jobs/search",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar vaga",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Auxiliar de Produção editado\",\r\n  \"area\": \"Produção\",\r\n  \"description\": \"Auxilia na linha de produção, organização e conferência.\",\r\n  \"state\": \"PR\",\r\n  \"city\": \"Ponta Grossa\",\r\n  \"salary\": 1800.00\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/jobs/:jobid",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								":jobid"
+							],
+							"variable": [
+								{
+									"key": "jobid",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Vaga",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/jobs/:jobid",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								":jobid"
+							],
+							"variable": [
+								{
+									"key": "jobid",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Aplicar vaga",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"name\": \"João da Silva\",\r\n    \"email\": \"joao@example.com\",\r\n    \"phone\": \"42999998888\",\r\n    \"education\": \"Superior em ADS\",\r\n    \"experience\": \"2 anos em suporte técnico, 3 anos de desenvolvedor\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/jobs/:jobid",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								":jobid"
+							],
+							"variable": [
+								{
+									"key": "jobid",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enviar feed para candidato (empresa)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": 2,\r\n    \"message\": \"Gostamos do seu perfil, vamos agendar entrevista.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/jobs/:jobId/feedback",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								":jobId",
+								"feedback"
+							],
+							"variable": [
+								{
+									"key": "jobId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Error",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"message\": \"Index 'salary' not found\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/error",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"error"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
