@@ -9,7 +9,6 @@ class SearchAllJobsUseCase {
   constructor(@inject('JobsRepository') private jobsRepository: IJobsRepository) {}
 
   async execute(filters: IJobFiltersDTO): Promise<IJobListDTO[]> {
-    console.log(filters.salary_range)
     const jobs = await this.jobsRepository.searchAllWithFilters(filters)
 
     if (jobs.length === 0) {

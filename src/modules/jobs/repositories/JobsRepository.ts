@@ -75,7 +75,7 @@ class JobsRepository implements IJobsRepository {
         'j.salary',
         'u.email as contact',
       )
-      .where('u.id', company_id)
+      .where('c.id', company_id)
 
     if (filters.title) {
       query = query.whereILike('j.title', `%${filters.title}%`)
@@ -83,6 +83,10 @@ class JobsRepository implements IJobsRepository {
 
     if (filters.area) {
       query = query.where('j.area', filters.area)
+    }
+
+    if (filters.company) {
+      query = query.whereILike('u.name', `%${filters.company}%`)
     }
 
     if (filters.state) {

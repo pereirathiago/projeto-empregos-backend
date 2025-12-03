@@ -40,16 +40,15 @@ class JobController {
   async getByCompanyId(req: Request, res: Response): Promise<Response> {
     const { company_id } = req.params
     const user = req.user
+    const filters: IJobFiltersDTO[] = req.body.filters || []
 
-    if (user.id !== company_id) {
+    if (user.id != company_id) {
       throw new ForbiddenError()
     }
 
-    const filters: IJobFiltersDTO = req.body.filters || {}
-
     const getJobsByCompanyUseCase = container.resolve(GetJobsByCompanyUseCase)
 
-    const jobs = await getJobsByCompanyUseCase.execute(Number(company_id), filters)
+    const jobs = await getJobsByCompanyUseCase.execute(Number(company_id), user.id, filters[0] || {})
 
     return res.status(200).json({ items: jobs })
   }

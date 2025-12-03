@@ -171,7 +171,7 @@ const searchJobsValidation: Yup.ObjectSchema<{ filters: IJobFiltersDTO[] }> = Yu
               min: Yup.number()
                 .optional()
                 .nullable()
-                .transform((value) => (value === 0 || value === null || value === undefined ? undefined : value))
+                .transform((value) => (value === 0 || value === null || value === undefined || value == '' ? undefined : value))
                 .test('min-validation', 'must_be_positive', function (value) {
                   if (value === undefined || value === null) return true
                   return value >= 0
@@ -179,7 +179,7 @@ const searchJobsValidation: Yup.ObjectSchema<{ filters: IJobFiltersDTO[] }> = Yu
               max: Yup.number()
                 .optional()
                 .nullable()
-                .transform((value) => (value === 0 || value === null || value === undefined ? undefined : value))
+                .transform((value) => (value === 0 || value === null || value === undefined || value == '' ? undefined : value))
                 .test('max-validation', 'must_be_positive', function (value) {
                   if (value === undefined || value === null) return true
                   return value >= 0
